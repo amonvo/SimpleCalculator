@@ -1,0 +1,148 @@
+﻿<Window x:Class="SimpleCalculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Kalkulačka" Height="500" Width="350" FontFamily="Segoe UI" Background="#1E1E1E" Foreground="White">
+
+    <!-- Definice stylu pro tlačítka a displej s přechody -->
+    <Window.Resources>
+        <!-- Styl tlačítek -->
+        <Style TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#3A3F47" Offset="0.0"/>
+                        <GradientStop Color="#5A5F67" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Zaoblené rohy a stín -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Animace při stisknutí tlačítka a najetí myši -->
+            <Style.Triggers>
+                <!-- Efekt při najetí myši -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#5A5F67" Offset="0.0"/>
+                                <GradientStop Color="#7A7F87" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <!-- Efekt při stisknutí tlačítka -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleX)"
+                                                 To="0.9" Duration="0:0:0.1" AutoReverse="True"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(ScaleTransform.ScaleY)"
+                                                 To="0.9" Duration="0:0:0.1" AutoReverse="True"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <!-- Mřížka pro obsah -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Displej kalkulačky -->
+        <Border Grid.Row="0" Margin="10" Padding="10" CornerRadius="10" Background="#FFF" BorderBrush="#333" BorderThickness="2">
+            <TextBox x:Name="Display"
+                     FontSize="30"
+                     FontWeight="Bold"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Top"
+                     Height="60"
+                     Background="#FFFFFF"
+                     Foreground="#000000"
+                     BorderBrush="Transparent"
+                     IsReadOnly="True"
+                     TextAlignment="Right"
+                     VerticalContentAlignment="Center"/>
+        </Border>
+
+        <!-- Mřížka pro tlačítka -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Řada 1 -->
+            <Button Grid.Row="0" Grid.Column="0" Content="7" Click="Number_Click"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="8" Click="Number_Click"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="9" Click="Number_Click"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="←" Click="Backspace_Click"/>
+
+            <!-- Řada 2 -->
+            <Button Grid.Row="1" Grid.Column="0" Content="4" Click="Number_Click"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="5" Click="Number_Click"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="6" Click="Number_Click"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="/" Background="#FF7043" Click="Operator_Click"/>
+
+            <!-- Řada 3 -->
+            <Button Grid.Row="2" Grid.Column="0" Content="1" Click="Number_Click"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="2" Click="Number_Click"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="3" Click="Number_Click"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="*" Background="#FF7043" Click="Operator_Click"/>
+
+            <!-- Řada 4 -->
+            <Button Grid.Row="3" Grid.Column="0" Content="0" Click="Number_Click"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="." Click="Decimal_Click"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="+" Background="#FF7043" Click="Operator_Click"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="-" Background="#FF7043" Click="Operator_Click"/>
+
+            <!-- Řada 5 -->
+            <Button Grid.Row="4" Grid.Column="0" Content="C" Background="#FF5252" Click="Clear_Click"/>
+            <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Content="=" Background="#66BB6A" Click="Equal_Click"/>
+        </Grid>
+    </Grid>
+</Window>
